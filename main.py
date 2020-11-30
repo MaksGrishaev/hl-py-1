@@ -6,11 +6,9 @@ def parse(query: str) -> dict:
     data_list = query.split('?')[1].split('&') if query.find('&') != -1 else query.split('?')[1].split('\n')
 
     for dict_item in data_list:
-        if len(dict_item) > 0 \
-                and dict_item.count('=') == 1 \
-                and len(dict_item[0:dict_item.find('='):]) > 1 \
-                and len(dict_item[dict_item.find('=') + 1::]) > 1:
-            result_dict[dict_item.split('=')[0]] = dict_item.split('=')[1]
+        if len(dict_item) > 0 and dict_item.count('=') == 1:
+            if len(dict_item[0:dict_item.find('='):]) > 1 and len(dict_item[dict_item.find('=') + 1::]) > 1:
+                result_dict[dict_item.split('=')[0]] = dict_item.split('=')[1]
     return result_dict
 
 
@@ -39,6 +37,7 @@ def check_str_without_spaces(query: str) -> bool:
             return False
     return True
 
+
 def parse_cookie(query: str) -> dict:
     if len(query) == 0 or query.count(';') == 0 or query.count('=') == 0:
         return {}
@@ -47,10 +46,10 @@ def parse_cookie(query: str) -> dict:
     for dict_item in data_list:
         if len(dict_item) != 0 and dict_item.count('=') > 0:
             key = dict_item.split('=')[0]
-            value = dict_item.split('=')[1]
-            if len(key) > 0 and len(value) > 0 :
+            value = dict_item[dict_item.find('=') + 1::]
+            if len(key) > 0 and len(value) > 0:
                 if check_str_without_spaces(key) and check_str_without_spaces(value):
-                    result_dict[dict_item.split('=')[0]] = dict_item[dict_item.find('=') + 1::]
+                    result_dict[key] = value
     return result_dict
 
 
